@@ -6,6 +6,7 @@ export default function MapView() {
   const { userLocation, setUserLocation, cafes, selectedCafe } = useCafeStore();
   const mapRef = useRef<L.Map | null>(null);
   const userMarkerRef = useRef<L.Marker | null>(null);
+  const pathRef = useRef<L.Polyline | null>(null); // Reference for the path line
 
   const userIcon = L.icon({
     iconUrl: "/your-location-icon.png",
@@ -19,6 +20,7 @@ export default function MapView() {
     iconAnchor: [15, 30],
   });
 
+  // Initialize map
   useEffect(() => {
     if (!mapRef.current) {
       mapRef.current = L.map("map").setView([19.076, 72.8777], 13);
@@ -35,18 +37,20 @@ export default function MapView() {
         if (!userMarkerRef.current) {
           userMarkerRef.current = L.marker(e.latlng, { icon: userIcon })
             .addTo(mapRef.current!)
-            .bindPopup("You are here")
+            .bindPopup("Your Location")
             .openPopup();
         } else {
           userMarkerRef.current.setLatLng(e.latlng);
         }
+
+        // Redraw path if a cafe is selected
+        if (selectedCafe) drawPath(e.latlng, selectedCafe);
       });
 
-      // Fix map display on initial load
       requestAnimationFrame(() => mapRef.current?.invalidateSize());
       window.addEventListener("resize", () => requestAnimationFrame(() => mapRef.current?.invalidateSize()));
     }
-  }, [setUserLocation]);
+  }, [setUserLocation, selectedCafe]);
 
   // Show cafes
   useEffect(() => {
@@ -67,16 +71,36 @@ export default function MapView() {
         .setContent(`<b>${selectedCafe.name}</b>`)
         .openOn(mapRef.current);
 
+      // Draw path from user location to cafe
+      if (userLocation) drawPath(userLocation, selectedCafe);
+
       requestAnimationFrame(() => mapRef.current?.invalidateSize());
     }
   }, [selectedCafe]);
 
+  // Draw path function
+  const drawPath = (from: L.LatLngLiteral, to: L.LatLngLiteral) => {
+    // Remove previous path
+    if (pathRef.current) {
+      pathRef.current.remove();
+    }
+
+    pathRef.current = L.polyline([from, to], {
+      color: "blue",
+      weight: 4,
+      opacity: 0.7,
+    }).addTo(mapRef.current!);
+  };    
+
+  // Recenter
   const recenter = () => {
     if (userLocation && mapRef.current) {
       mapRef.current.setView([userLocation.lat, userLocation.lng], 15, { animate: true });
       if (userMarkerRef.current) userMarkerRef.current.openPopup();
 
-      // Ensure tiles redraw properly
+      // Redraw path if cafe selected
+      if (selectedCafe) drawPath(userLocation, selectedCafe);
+
       requestAnimationFrame(() => mapRef.current?.invalidateSize());
     }
   };

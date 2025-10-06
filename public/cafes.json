@@ -3,6 +3,7 @@
     { "id": 2, "name": "Blue Mug", "lat": 19.081, "lng": 72.875 },
     { "id": 3, "name": "Coffee Corner", "lat": 19.078, "lng": 72.88 },
     { "id": 4, "name": "Choco Bean", "lat": 19.072, "lng": 72.879 },
-    { "id": 5, "name": "Brew Haven", "lat": 19.074, "lng": 72.873 }
+    { "id": 5, "name": "Brew Haven", "lat": 19.074, "lng": 72.873 },
+    { "id": 6, "name": "Cafe Regal", "lat": 22.8046, "lng": 86.2029 }
 ]
   
