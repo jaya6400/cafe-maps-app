@@ -4,6 +4,7 @@ A React + TypeScript + Vite web app to locate nearby cafes, show them on a Leafl
 
 ---
 
+Deplyment Link: https://cafe-maps-meeclpc2z-jaya-dubeys-projects.vercel.app/
 ## Features
 
 - Responsive map view for desktop and mobile
@@ -40,3 +41,6 @@ Production-ready files will be generated in the dist/ folder.
 
 ### Deployment
 This app can be deployed on Vercel or any static hosting service.
+
+### Screenshot
+- <Image width="954" height="422" alt="Capture" src="https://github.com/user-attachments/assets/560cfdb7-eeef-448c-9b1f-26dc6fb05811" />
