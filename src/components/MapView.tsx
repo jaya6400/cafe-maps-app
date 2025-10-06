@@ -7,7 +7,6 @@ export default function MapView() {
   const mapRef = useRef<L.Map | null>(null);
   const userMarkerRef = useRef<L.Marker | null>(null);
 
-  // Custom icons
   const userIcon = L.icon({
     iconUrl: "/your-location-icon.png",
     iconSize: [30, 30],
@@ -20,7 +19,6 @@ export default function MapView() {
     iconAnchor: [15, 30],
   });
 
-  // Initialize map and locate user
   useEffect(() => {
     if (!mapRef.current) {
       mapRef.current = L.map("map").setView([19.076, 72.8777], 13);
@@ -33,6 +31,7 @@ export default function MapView() {
 
       mapRef.current.on("locationfound", (e: L.LocationEvent) => {
         setUserLocation(e.latlng.lat, e.latlng.lng);
+
         if (!userMarkerRef.current) {
           userMarkerRef.current = L.marker(e.latlng, { icon: userIcon })
             .addTo(mapRef.current!)
@@ -42,10 +41,14 @@ export default function MapView() {
           userMarkerRef.current.setLatLng(e.latlng);
         }
       });
+
+      // Fix map display on initial load
+      requestAnimationFrame(() => mapRef.current?.invalidateSize());
+      window.addEventListener("resize", () => requestAnimationFrame(() => mapRef.current?.invalidateSize()));
     }
   }, [setUserLocation]);
 
-  // Show cafes as markers
+  // Show cafes
   useEffect(() => {
     if (!mapRef.current) return;
     cafes.forEach((cafe) => {
@@ -55,41 +58,38 @@ export default function MapView() {
     });
   }, [cafes]);
 
-  // Jump to selected cafe
+  // Selected cafe
   useEffect(() => {
     if (selectedCafe && mapRef.current) {
-      mapRef.current.setView([selectedCafe.lat, selectedCafe.lng], 15);
+      mapRef.current.setView([selectedCafe.lat, selectedCafe.lng], 15, { animate: true });
       L.popup()
         .setLatLng([selectedCafe.lat, selectedCafe.lng])
         .setContent(`<b>${selectedCafe.name}</b>`)
         .openOn(mapRef.current);
+
+      requestAnimationFrame(() => mapRef.current?.invalidateSize());
     }
   }, [selectedCafe]);
 
-  // Recenter to user location
   const recenter = () => {
     if (userLocation && mapRef.current) {
-      mapRef.current.setView([userLocation.lat, userLocation.lng], 15);
+      mapRef.current.setView([userLocation.lat, userLocation.lng], 15, { animate: true });
+      if (userMarkerRef.current) userMarkerRef.current.openPopup();
+
+      // Ensure tiles redraw properly
+      requestAnimationFrame(() => mapRef.current?.invalidateSize());
     }
   };
 
   return (
-    <div className="flex flex-col flex-1 gap-2">
-      {/* Recenter button above map */}
-      <div className="flex justify-end mb-1">
-        <button
-          onClick={recenter}
-          className="bg-white p-2 rounded-full shadow hover:scale-105 transition-transform"
-        >
+    <div className="flex flex-col w-full h-full">
+      <div className="flex justify-end mb-2">
+        <button onClick={recenter} className="recenter-btn">
           <img src="/recenter-icon.png" alt="Recenter" className="w-6 h-6" />
         </button>
       </div>
 
-      {/* Map */}
-      <div
-        id="map"
-        className="w-full h-[50vh] md:h-[60vh] rounded-lg shadow-md flex-1"
-      ></div>
+      <div id="map" className="map-container"></div>
     </div>
   );
 }
