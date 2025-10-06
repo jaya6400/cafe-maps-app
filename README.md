@@ -35,8 +35,9 @@ npm run dev
 Open your browser at http://localhost:5173 to see the app.
 
 Build for Production
+```
 npm run build
-
+```
 Production-ready files will be generated in the dist/ folder.
 
 ### Using Docker:
