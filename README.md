@@ -35,10 +35,20 @@ npm run dev
 Open your browser at http://localhost:5173 to see the app.
 
 Build for Production
+```
 npm run build
-
+```
 Production-ready files will be generated in the dist/ folder.
 
+### Using Docker:
+### Build Docker image
+```
+docker build -t cafe-maps-app .
+```
+### Run container
+```
+docker run -p 3000:3000 cafe-maps-app
+```
 ### Deployment
 This app can be deployed on Vercel or any static hosting service.
 
