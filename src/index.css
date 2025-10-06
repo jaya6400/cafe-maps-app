@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Recenter button */
+.recenter-btn {
+  @apply bg-white p-2 rounded-full shadow hover:scale-105 transition-transform;
+}
+
+/* Map container */
+.map-container {
+  @apply w-full rounded-lg shadow-md;
+
+  /* Mobile default */
+  height: 45vh;
+  min-height: 300px; /* ensures map is visible on small screens */
+}
+
+@media (min-width: 640px) {
+  .map-container {
+    height: 50vh; /* tablets */
+  }
+}
+
+@media (min-width: 768px) {
+  .map-container {
+    @apply flex-1; /* desktop uses remaining space */
+    height: auto;  /* let flex-1 handle it */
+  }
+}
