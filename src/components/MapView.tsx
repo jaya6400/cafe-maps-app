@@ -7,6 +7,19 @@ export default function MapView() {
   const mapRef = useRef<L.Map | null>(null);
   const userMarkerRef = useRef<L.Marker | null>(null);
 
+  // Custom icons
+  const userIcon = L.icon({
+    iconUrl: "/your-location-icon.png",
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+  });
+
+  const destinationIcon = L.icon({
+    iconUrl: "/destination-icon.png", // fixed extension
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+  });
+
   // Initialize map and locate user
   useEffect(() => {
     if (!mapRef.current) {
@@ -21,7 +34,7 @@ export default function MapView() {
       mapRef.current.on("locationfound", (e: L.LocationEvent) => {
         setUserLocation(e.latlng.lat, e.latlng.lng);
         if (!userMarkerRef.current) {
-          userMarkerRef.current = L.marker(e.latlng)
+          userMarkerRef.current = L.marker(e.latlng, { icon: userIcon })
             .addTo(mapRef.current!)
             .bindPopup("You are here")
             .openPopup();
@@ -36,7 +49,7 @@ export default function MapView() {
   useEffect(() => {
     if (!mapRef.current) return;
     cafes.forEach((cafe) => {
-      L.marker([cafe.lat, cafe.lng])
+      L.marker([cafe.lat, cafe.lng], { icon: destinationIcon })
         .addTo(mapRef.current!)
         .bindPopup(`<b>${cafe.name}</b>`);
     });
@@ -64,11 +77,16 @@ export default function MapView() {
     <div className="relative w-full h-[80vh]">
       <div id="map" className="w-full h-full rounded-lg shadow-md"></div>
 
+      {/* Recenter button */}
       <button
         onClick={recenter}
-        className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:scale-105 transition-transform"
+        className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:scale-105 transition-transform z-50"
       >
-        📍
+        <img
+          src="/recenter-icon.png"
+          alt="Recenter"
+          className="w-6 h-6"
+        />
       </button>
     </div>
   );
