@@ -41,11 +41,11 @@ npm run build
 Production-ready files will be generated in the dist/ folder.
 
 ### Using Docker:
-# Build Docker image
+### Build Docker image
 ```
 docker build -t cafe-maps-app .
 ```
-# Run container
+### Run container
 ```
 docker run -p 3000:3000 cafe-maps-app
 ```
