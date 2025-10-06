@@ -1,9 +1,9 @@
-import MapView from './components/MapView';
-import CafeList from './components/CafeList';
+import CafeList from "./components/CafeList";
+import MapView from "./components/MapView";
 
 export default function App() {
   return (
-    <div style={{ display: 'flex' }}>
+    <div className="p-4">
       <CafeList />
       <MapView />
     </div>
