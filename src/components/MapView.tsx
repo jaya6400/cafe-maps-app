@@ -15,7 +15,7 @@ export default function MapView() {
   });
 
   const destinationIcon = L.icon({
-    iconUrl: "/destination-icon.png", // fixed extension
+    iconUrl: "/destination-icon.png",
     iconSize: [30, 30],
     iconAnchor: [15, 30],
   });
@@ -74,20 +74,22 @@ export default function MapView() {
   };
 
   return (
-    <div className="relative w-full h-[80vh]">
-      <div id="map" className="w-full h-full rounded-lg shadow-md"></div>
+    <div className="flex flex-col flex-1 gap-2">
+      {/* Recenter button above map */}
+      <div className="flex justify-end mb-1">
+        <button
+          onClick={recenter}
+          className="bg-white p-2 rounded-full shadow hover:scale-105 transition-transform"
+        >
+          <img src="/recenter-icon.png" alt="Recenter" className="w-6 h-6" />
+        </button>
+      </div>
 
-      {/* Recenter button */}
-      <button
-        onClick={recenter}
-        className="absolute top-3 right-3 bg-white p-2 rounded-full shadow hover:scale-105 transition-transform z-50"
-      >
-        <img
-          src="/recenter-icon.png"
-          alt="Recenter"
-          className="w-6 h-6"
-        />
-      </button>
+      {/* Map */}
+      <div
+        id="map"
+        className="w-full h-[50vh] md:h-[60vh] rounded-lg shadow-md flex-1"
+      ></div>
     </div>
   );
 }
